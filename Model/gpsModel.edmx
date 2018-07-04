@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="gpsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="devices">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="uniqueid" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="lastupdate" Type="datetime" />
+          <Property Name="positionid" Type="int" />
+          <Property Name="groupid" Type="int" />
+          <Property Name="attributes" Type="varchar" MaxLength="4000" />
+          <Property Name="phone" Type="varchar" MaxLength="128" />
+          <Property Name="model" Type="varchar" MaxLength="128" />
+          <Property Name="contact" Type="varchar" MaxLength="512" />
+          <Property Name="category" Type="varchar" MaxLength="128" />
+          <Property Name="routeId" Type="int" />
+        </EntityType>
+        <EntityType Name="passenger_counters">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="deviceid" Type="int" Nullable="false" />
+          <Property Name="totalPassengerIn" Type="int" Nullable="false" />
+          <Property Name="totalPassengerOut" Type="int" Nullable="false" />
+          <Property Name="currentPassengerIn" Type="int" Nullable="false" />
+          <Property Name="servertime" Type="datetime" Nullable="false" />
+          <Property Name="devicetime" Type="datetime" Nullable="false" />
+          <Property Name="routeid" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="positions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="protocol" Type="varchar" MaxLength="128" />
+          <Property Name="deviceid" Type="int" Nullable="false" />
+          <Property Name="servertime" Type="datetime" Nullable="false" />
+          <Property Name="devicetime" Type="datetime" Nullable="false" />
+          <Property Name="fixtime" Type="datetime" Nullable="false" />
+          <Property Name="valid" Type="bit" Nullable="false" />
+          <Property Name="latitude" Type="float" Nullable="false" />
+          <Property Name="longitude" Type="float" Nullable="false" />
+          <Property Name="altitude" Type="float" Nullable="false" />
+          <Property Name="speed" Type="float" Nullable="false" />
+          <Property Name="course" Type="float" Nullable="false" />
+          <Property Name="address" Type="varchar" MaxLength="512" />
+          <Property Name="attributes" Type="varchar" MaxLength="4000" />
+          <Property Name="accuracy" Type="float" Nullable="false" />
+          <Property Name="network" Type="varchar" MaxLength="4000" />
+        </EntityType>
+        <Association Name="FK_passenger_counters_devices">
+          <End Role="devices" Type="Self.devices" Multiplicity="1" />
+          <End Role="passenger_counters" Type="Self.passenger_counters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devices">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="passenger_counters">
+              <PropertyRef Name="deviceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_position_deviceid">
+          <End Role="devices" Type="Self.devices" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="positions" Type="Self.positions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devices">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="positions">
+              <PropertyRef Name="deviceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="gpsModelStoreContainer">
+          <EntitySet Name="devices" EntityType="Self.devices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="passenger_counters" EntityType="Self.passenger_counters" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="positions" EntityType="Self.positions" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_passenger_counters_devices" Association="Self.FK_passenger_counters_devices">
+            <End Role="devices" EntitySet="devices" />
+            <End Role="passenger_counters" EntitySet="passenger_counters" />
+          </AssociationSet>
+          <AssociationSet Name="fk_position_deviceid" Association="Self.fk_position_deviceid">
+            <End Role="devices" EntitySet="devices" />
+            <End Role="positions" EntitySet="positions" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="gpsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="devices">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="uniqueid" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="lastupdate" Type="DateTime" Precision="3" />
+          <Property Name="positionid" Type="Int32" />
+          <Property Name="groupid" Type="Int32" />
+          <Property Name="attributes" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="phone" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="model" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="contact" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="category" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="positions" Relationship="Self.fk_position_deviceid" FromRole="devices" ToRole="positions" />
+          <NavigationProperty Name="passenger_counters" Relationship="gpsModel.FK_passenger_counters_devices" FromRole="devices" ToRole="passenger_counters" />
+          <Property Name="routeId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="positions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="protocol" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="deviceid" Type="Int32" Nullable="false" />
+          <Property Name="servertime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="devicetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="fixtime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="valid" Type="Boolean" Nullable="false" />
+          <Property Name="latitude" Type="Double" Nullable="false" />
+          <Property Name="longitude" Type="Double" Nullable="false" />
+          <Property Name="altitude" Type="Double" Nullable="false" />
+          <Property Name="speed" Type="Double" Nullable="false" />
+          <Property Name="course" Type="Double" Nullable="false" />
+          <Property Name="address" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="attributes" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="accuracy" Type="Double" Nullable="false" />
+          <Property Name="network" Type="String" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="devices" Relationship="Self.fk_position_deviceid" FromRole="positions" ToRole="devices" />
+        </EntityType>
+        <Association Name="fk_position_deviceid">
+          <End Role="devices" Type="Self.devices" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="positions" Type="Self.positions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devices">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="positions">
+              <PropertyRef Name="deviceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="gpsEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="devices" EntityType="Self.devices" />
+          <EntitySet Name="positions" EntityType="Self.positions" />
+          <AssociationSet Name="fk_position_deviceid" Association="Self.fk_position_deviceid">
+            <End Role="devices" EntitySet="devices" />
+            <End Role="positions" EntitySet="positions" />
+          </AssociationSet>
+          <EntitySet Name="passenger_counters" EntityType="gpsModel.passenger_counters" />
+          <AssociationSet Name="FK_passenger_counters_devices" Association="gpsModel.FK_passenger_counters_devices">
+            <End Role="devices" EntitySet="devices" />
+            <End Role="passenger_counters" EntitySet="passenger_counters" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="passenger_counters">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="deviceid" Type="Int32" Nullable="false" />
+          <Property Name="servertime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="totalPassengerIn" Type="Int32" Nullable="false" />
+          <Property Name="totalPassengerOut" Type="Int32" Nullable="false" />
+          <Property Name="currentPassengerIn" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="devices" Relationship="gpsModel.FK_passenger_counters_devices" FromRole="passenger_counters" ToRole="devices" />
+          <Property Name="devicetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="routeid" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_passenger_counters_devices">
+          <End Type="gpsModel.devices" Role="devices" Multiplicity="1" />
+          <End Type="gpsModel.passenger_counters" Role="passenger_counters" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="devices">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="passenger_counters">
+              <PropertyRef Name="deviceid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="gpsModelStoreContainer" CdmEntityContainer="gpsEntities">
+          <EntitySetMapping Name="devices">
+            <EntityTypeMapping TypeName="gpsModel.devices">
+              <MappingFragment StoreEntitySet="devices">
+                <ScalarProperty Name="routeId" ColumnName="routeId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="uniqueid" ColumnName="uniqueid" />
+                <ScalarProperty Name="lastupdate" ColumnName="lastupdate" />
+                <ScalarProperty Name="positionid" ColumnName="positionid" />
+                <ScalarProperty Name="groupid" ColumnName="groupid" />
+                <ScalarProperty Name="attributes" ColumnName="attributes" />
+                <ScalarProperty Name="phone" ColumnName="phone" />
+                <ScalarProperty Name="model" ColumnName="model" />
+                <ScalarProperty Name="contact" ColumnName="contact" />
+                <ScalarProperty Name="category" ColumnName="category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="positions">
+            <EntityTypeMapping TypeName="gpsModel.positions">
+              <MappingFragment StoreEntitySet="positions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="protocol" ColumnName="protocol" />
+                <ScalarProperty Name="deviceid" ColumnName="deviceid" />
+                <ScalarProperty Name="servertime" ColumnName="servertime" />
+                <ScalarProperty Name="devicetime" ColumnName="devicetime" />
+                <ScalarProperty Name="fixtime" ColumnName="fixtime" />
+                <ScalarProperty Name="valid" ColumnName="valid" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
+                <ScalarProperty Name="altitude" ColumnName="altitude" />
+                <ScalarProperty Name="speed" ColumnName="speed" />
+                <ScalarProperty Name="course" ColumnName="course" />
+                <ScalarProperty Name="address" ColumnName="address" />
+                <ScalarProperty Name="attributes" ColumnName="attributes" />
+                <ScalarProperty Name="accuracy" ColumnName="accuracy" />
+                <ScalarProperty Name="network" ColumnName="network" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="passenger_counters">
+            <EntityTypeMapping TypeName="gpsModel.passenger_counters">
+              <MappingFragment StoreEntitySet="passenger_counters">
+                <ScalarProperty Name="routeid" ColumnName="routeid" />
+                <ScalarProperty Name="devicetime" ColumnName="devicetime" />
+                <ScalarProperty Name="currentPassengerIn" ColumnName="currentPassengerIn" />
+                <ScalarProperty Name="totalPassengerOut" ColumnName="totalPassengerOut" />
+                <ScalarProperty Name="totalPassengerIn" ColumnName="totalPassengerIn" />
+                <ScalarProperty Name="servertime" ColumnName="servertime" />
+                <ScalarProperty Name="deviceid" ColumnName="deviceid" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
